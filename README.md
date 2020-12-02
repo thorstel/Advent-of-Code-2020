@@ -1,6 +1,14 @@
-# Advent-of-Code-2020
-My puzzle solutions for Advent of Code 2020. This time, I am focussing on solving the puzzles as quickly as I can. Might do some clean-up afterwards, but do not expect anything exemplary here.
+# Advent of Code 2020
+My puzzle solutions for Advent of Code 2020. Nothing fancy this time, I am simply focussing on solving the puzzles as quickly as I can in C++ (using dirty tricks such as `#include <bits/stdc++.h>` 😬). Might do some clean-up afterwards, but do not expect anything exemplary here.
 
-I am not committing myself to a single programming language this year, but most days I will probably just use my "dirty" C++ template with `#include <bits/stdc++.h>` 😬
+## Build & Run
+Most of my solutions will be standalone C++ programs with no external dependencies (other than the STL). Compiling should be as simple as
+```
+$ g++ main.cc
+```
 
-All my solutions will assume that the input can be read from `stdin`.
+My solutions assume that the input can be read from `stdin`. I am running them like this:
+```
+$ ./a.out <input.txt
+```
+
