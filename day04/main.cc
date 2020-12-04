@@ -75,23 +75,25 @@ int main()
 	string line;
 	stringstream ss;
 	ll valid1 = 0, valid2 = 0;
+	auto check = [&] {
+		string pw = ss.str();
+		ss.str(string());
+
+		// Part 1
+		if (all_of(fields.begin(), fields.end(), [&](auto& f) { return pw.find(f) != string::npos; })) { 
+			++valid1;
+		}
+
+		// Part 2
+		if (byr(pw) && iyr(pw) && eyr(pw) && hgt(pw) && hcl(pw) && ecl(pw) && pid(pw)) {
+			++valid2;
+		}
+	};
 	while (getline(cin, line)) {
 		ss << " " << line << " ";
-		if (line.empty()) {
-			string pw = ss.str();
-			ss.str(string());
-
-			// Part 1
-			if (all_of(fields.begin(), fields.end(), [&](auto& f) { return pw.find(f) != string::npos; })) { 
-				++valid1;
-			}
-
-			// Part 2
-			if (byr(pw) && iyr(pw) && eyr(pw) && hgt(pw) && hcl(pw) && ecl(pw) && pid(pw)) {
-				++valid2;
-			}
-		}
+		if (line.empty()) check();
 	}
+	check();
 	cout << valid1 << endl;
 	cout << valid2 << endl;
 	return 0;
