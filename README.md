@@ -4,7 +4,7 @@ My puzzle solutions for Advent of Code 2020. Nothing fancy this time, I am simpl
 ## Build & Run
 Most of my solutions will be standalone C++ programs with no external dependencies (other than the STL). Compiling should be as simple as
 ```
-$ g++ main.cc
+$ g++ -std=c++17 main.cc
 ```
 
 My solutions assume that the input can be read from `stdin`. I am running them like this:

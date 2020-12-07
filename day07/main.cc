@@ -22,15 +22,10 @@ int main()
 	string line;
 	while (getline(cin, line)) {
 		smatch m;
-		if (!regex_search(line, m, pat1)) {
-			cout << "ERROR\n";
-			return 1;
-		}
+		bool found = regex_search(line, m, pat1);
+		assert(found);
 		contained_in.emplace(m[1], unordered_map<string, ll>());
-		for (
-				auto it = sregex_iterator(line.begin(), line.end(), pat2);
-				it != sregex_iterator();
-				++it) {
+		for (auto it = sregex_iterator(line.begin(), line.end(), pat2); it != sregex_iterator(); ++it) {
 			if (!contained_by.emplace((*it)[2], unordered_set<string>({m[1]})).second) {
 				contained_by[(*it)[2]].insert(m[1]);
 			}
