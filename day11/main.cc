@@ -9,9 +9,10 @@ static const vector<pair<ll,ll>> deltas {
 	{ 1, -1}, { 1, 0}, { 1, 1}
 };
 
-template<ll Part = 1>
+template<int Part>
 static vector<string> mutate(const vector<string>& old)
 {
+	static_assert(Part == 1 || Part == 2);
 	vector<string> grid = old;
 	ll nrow = old.size(), ncol = old[0].size();
 	for (ll r = 0; r < nrow; ++r) {
@@ -48,8 +49,7 @@ static vector<string> mutate(const vector<string>& old)
 
 int main()
 {
-	vector<string> grid1 {istream_iterator<string>{cin}, {}};
-	vector<string> grid2 = grid1;
+	vector<string> grid1 {istream_iterator<string>{cin}, {}}, grid2 {grid1};
 	optional<ll> cnt1, cnt2;
 	auto num_seats = [](ll n, string& s) { return n + count(s.begin(), s.end(), '#'); };
 	while (!cnt1 || !cnt2) {
