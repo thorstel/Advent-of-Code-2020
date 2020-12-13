@@ -6,8 +6,7 @@ using ll = long long;
 tuple<ll,ll,ll> extended_gcd(ll a, ll b)
 {
 	if (a == 0) { return make_tuple(b, 0, 1); }
-	ll gcdiv, x, y;
-	tie(gcdiv, x, y) = extended_gcd(b % a, a);
+	auto [gcdiv, x, y] = extended_gcd(b % a, a);
 	return make_tuple(gcdiv, y - ((b / a) * x), x);
 }
 
@@ -28,7 +27,7 @@ int main()
 				p1_result = id * diff;
 			}
 			// Part 2: x = a[i] (mod m[i]) = id - offset (mod id)
-			a.push_back((id - (offset % id)) % id);
+			a.push_back(id - (offset % id));
 			m.push_back(id);
 		}
 		++offset;
@@ -40,8 +39,7 @@ int main()
 	ll x = 0;
 	for (auto i = 0u; i < m.size(); ++i) {
 		ll b = M / m[i];
-		ll gcdiv, b_inv, _;
-		tie(gcdiv, b_inv, _) = extended_gcd(b, m[i]);
+		auto [gcdiv, b_inv, _] = extended_gcd(b, m[i]);
 		assert(gcdiv == 1);
 		x = (M + x + (a[i] * b * b_inv)) % M;
 	}
