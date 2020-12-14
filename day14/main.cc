@@ -28,8 +28,8 @@ int main()
 			mask0 = tmp0.to_ullong();
 			mask1 = tmp1.to_ullong();
 		} else if (regex_match(line, match, mem_pattern)) {
-			ull addr = stoi(match[1]);
-			ull val1 = stoi(match[2]), val2 = val1;
+			ull addr = stoull(match[1]);
+			ull val1 = stoull(match[2]), val2 = val1;
 			// Part 1
 			val1 &= mask0;
 			val1 |= mask1;
