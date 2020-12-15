@@ -7,11 +7,9 @@ int main()
 {
 	ll turn = 0, num = 0;
 	unordered_map<ll,ll> last_spoken;
-	bool init = false;
 	string s;
 	while (getline(cin, s, ',')) {
-		if (init) { last_spoken[num] = turn; }
-		else { init = true; }
+		if (turn > 0) { last_spoken[num] = turn; }
 		num = stoll(s);
 		++turn;
 	}
