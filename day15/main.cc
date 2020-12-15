@@ -10,10 +10,9 @@ int main()
 	bool init = false;
 	string s;
 	while (getline(cin, s, ',')) {
-		ll x = stoll(s);
 		if (init) { last_spoken[num] = turn; }
 		else { init = true; }
-		num = x;
+		num = stoll(s);
 		++turn;
 	}
 	for (; turn < 30000000; ++turn) {
