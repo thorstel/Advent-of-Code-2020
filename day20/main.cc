@@ -49,7 +49,6 @@ static string get_side(const vector<string>& tile, ll side)
 			assert(false);
 			break;
 	}
-
 	return ss.str();
 }
 
@@ -182,7 +181,7 @@ int main()
 		}
 	}
 
-	vector<string> monster {
+	const vector<string> monster {
 		"                  # ",
 		"#    ##    ##    ###",
 		" #  #  #  #  #  #   "
@@ -200,23 +199,21 @@ int main()
 	}
 
 	// Find the sea monsters for Part 2
-	auto all_images = get_orientations(image);
-	for (auto& img : all_images) {
-		bool found = false;
-		for (ull r = 0; r < (img.size() - maxr); ++r) {
-			for (ull c = 0; c < (img[r].size() - maxc); ++c) {
+	for (const auto& img : get_orientations(image)) {
+		set<pair<ull,ull>> mon_coords;
+		for (ull r = 0u; r < (img.size() - maxr); ++r) {
+			for (ull c = 0u; c < (img[r].size() - maxc); ++c) {
 				auto match_mon = [&](auto& p) { return img[r + p.first][c + p.second] == '#'; };
 				if (all_of(begin(mon_offsets), end(mon_offsets), match_mon)) {
 					for (auto [dr, dc] : mon_offsets) {
-						img[r + dr][c + dc] = '.';
+						mon_coords.insert(make_pair(r + dr, c + dc));
 					}
-					found = true;
 				}
 			}
 		}
-		if (found) {
-			auto roughness = [](auto p, string& s) { return p + count(begin(s), end(s), '#'); };
-			cout << accumulate(begin(img), end(img), 0ull, roughness) << endl;
+		if (mon_coords.size() > 0u) {
+			auto roughness = [](auto p, const auto& s) { return p + count(begin(s), end(s), '#'); };
+			cout << (accumulate(begin(img), end(img), 0ull, roughness) - mon_coords.size()) << endl;
 		}
 	}
 	return 0;
