@@ -1,57 +1,45 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-using ull = unsigned long long;
+using ll = long long;
+#define sz(X) ((long long)(X).size())
 
-struct Cup
+static array<ll, 1'000'001> cups; // Unused index 0 so that cup no. == array index
+static constexpr ll choose_dst(ll dst, ll last_cup) { return dst > 1 ? dst - 1 : last_cup; }
+static constexpr ll cup_id(char c) { return c - '0'; }
+
+void play_game(const string& input, ll num_cups, ll num_rounds)
 {
-	ull id;
-	Cup *next;
-};
-
-vector<Cup> play_game(const string& input, ull num_cups, ull num_rounds)
-{
-	assert(num_cups >= input.size());
-	auto choose_dst = [&](ull dst) { return (dst == 1) ? num_cups : (dst - 1); };
-
-	vector<Cup> cups(num_cups);
-	for (ull i = 0; i < cups.size(); ++i) {
-		cups[i].id = (i + 1);
-		if (i < cups.size() - 1) {
-			cups[i].next = &cups[i + 1];
-		}
-	}
-
-	ull last_id = num_cups, max_id = 0;
+	assert(num_cups < sz(cups));
+	ll last_id = sz(cups) - 1, max_id = 0;
 	for (char c : input) {
-		ull id = c - '0';
-		cups[last_id - 1].next = &cups[id - 1];
+		ll id = cup_id(c);
+		cups[last_id] = id;
 		last_id = id;
-		max_id = max(max_id, id);
+		max_id = max(id, max_id);
 	}
-
-	auto *current = &cups[input[0] - '0' - 1];
-	if (input.size() == num_cups) {
-		cups[last_id - 1].next = current;
+	if (num_cups == sz(input)) {
+		cups[cup_id(input.back())] = cup_id(input[0]);
 	} else {
-		cups[last_id - 1].next = &cups[max_id];
+		++max_id;
+		cups[cup_id(input.back())] = max_id;
+		iota(begin(cups) + max_id, end(cups) - 1, max_id + 1);
 	}
 
-	for (ull i = 0; i < num_rounds; ++i) {
-		auto *cup1 = current->next;
-		auto *cup2 = cup1->next;
-		auto *cup3 = cup2->next;
-		ull dst = choose_dst(current->id);
-		while (dst == cup1->id || dst == cup2->id || dst == cup3->id) {
-			dst = choose_dst(dst);
+	ll current = cup_id(input[0]);
+	for (ll i = 0; i < num_rounds; ++i) {
+		ll cup1 = cups[current];
+		ll cup2 = cups[cup1];
+		ll cup3 = cups[cup2];
+		ll dst = choose_dst(current, num_cups);
+		while (dst == cup1 || dst == cup2 || dst == cup3) {
+			dst = choose_dst(dst, num_cups);
 		}
-		auto *dst_cup = &cups[dst - 1];
-		current->next = cup3->next;
-		cup3->next = dst_cup->next;
-		dst_cup->next = cup1;
-		current = current->next;
+		cups[current] = cups[cup3];
+		cups[cup3] = cups[dst];
+		cups[dst] = cup1;
+		current = cups[current];
 	}
-	return cups;
 }
 
 int main()
@@ -60,16 +48,16 @@ int main()
 	cin >> input;
 
 	// Part 1
-	auto cups = play_game(input, input.size(), 100);
-	auto *current = &cups[0];
-	for (auto i = 0u; i < cups.size() - 1; ++i) {
-		current = current->next;
-		cout << current->id;
+	play_game(input, sz(input), 100);
+	ll c = cups[1];
+	for (ll _ = 0; _ < sz(input) - 1; ++_) {
+		cout << c;
+		c = cups[c];
 	}
 	cout << endl;
 
 	// Part 2
-	cups = play_game(input, 1'000'000, 10'000'000);
-	cout << (cups[0].next->id) * (cups[0].next->next->id) << endl;
+	play_game(input, 1'000'000, 10'000'000);
+	cout << (cups[1] * cups[cups[1]]) << endl;
 	return 0;
 }
